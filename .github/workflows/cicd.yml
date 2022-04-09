@@ -38,6 +38,13 @@ jobs:
       - name: Start Docker containers for Zookeeper, Kafka and Schema Registry
         run: docker-compose down -v && docker-compose up -d
 
+      - name: Run cargo fmt
+        run: cargo fmt --all -- --check
+
+      - name: Check
+        run: |
+          cargo clippy --all
+
       - name: Run default tests
         uses: actions-rs/cargo@v1
         timeout-minutes: 40
