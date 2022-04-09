@@ -27,6 +27,7 @@ jobs:
           toolchain: ${{ matrix.version }}-x86_64-unknown-linux-gnu
           profile: minimal
           override: true
+          components: rustfmt, clippy
       - uses: Swatinem/rust-cache@v1
 
       - name: Generate Cargo.lock
@@ -44,41 +45,13 @@ jobs:
           command: test
           args: --all -- --test-threads 1 --nocapture
 
+      - name: Run cargo check
+        uses: actions-rs/cargo@v1
+        with:
+          command: check
+
       - name: Check build
         uses: actions-rs/cargo@v1
         timeout-minutes: 40
         with:
           command: build
-  fmt:
-    name: fmt
-    runs-on: ubuntu-latest
-    env:
-      RUST_LOG: "0"
-    steps:
-      - uses: actions/checkout@v2
-
-      # We explicitly do this to cache properly.
-      - name: Install Rust
-        uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          components: rustfmt
-
-      - name: Run cargo fmt
-        run: cargo fmt --all -- --check
-
-  clippy:
-    name: Clippy
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Install Rust
-        uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          components: clippy
-
-      - name: Check
-        run: |
-          cargo clippy --all
