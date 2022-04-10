@@ -85,7 +85,7 @@ where
     async fn call(&self, stream: CStream, req: Context<State>) -> CResult<()> {
         let fut = (self.clo)(stream, req);
         let res = fut.await?;
-        Ok(res.into())
+        Ok(res)
     }
 }
 

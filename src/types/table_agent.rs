@@ -99,7 +99,7 @@ where
     ) -> CResult<()> {
         let fut = (self.clo)(msg, tables, req);
         let res = fut.await?;
-        Ok(res.into())
+        Ok(res)
     }
 }
 

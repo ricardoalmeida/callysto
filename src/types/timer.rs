@@ -60,7 +60,7 @@ where
         let fut = (self.clo)(req);
         let res = fut.await?;
         let _ = Delay::new(std::time::Duration::from_secs_f64(self.interval)).await;
-        Ok(res.into())
+        Ok(res)
     }
 
     async fn start(&self) -> Result<BoxFuture<'_, ()>> {

@@ -29,14 +29,14 @@ pub struct InMemoryStore {
 
 impl InMemoryStore {
     pub fn new(app_name: String, storage_url: Url, table_name: String) -> Self {
-        let mut rds = Self {
+        
+        Self {
             app_name,
             storage_url,
             table_name,
             service_state: Arc::new(AtomicBox::new(ServiceState::PreStart)),
             dbs: LOTable::default(),
-        };
-        rds
+        }
     }
 
     fn db_for_partition(&self, partition: usize) -> Result<Arc<InMemoryDb>> {
@@ -70,7 +70,7 @@ where
     }
 
     async fn restart(&self) -> Result<()> {
-        <Self as Service<State>>::stop(&self)
+        <Self as Service<State>>::stop(self)
             .and_then(|_| <Self as Service<State>>::start(self))
             .await;
 

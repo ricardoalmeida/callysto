@@ -68,7 +68,7 @@ where
     async fn call(&self, req: Context<State>) -> CResult<()> {
         let fut = (self.clo)(req);
         let res = fut.await?;
-        Ok(res.into())
+        Ok(res)
     }
 
     async fn start(&self) -> Result<BoxFuture<'_, ()>> {

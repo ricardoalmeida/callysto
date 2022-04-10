@@ -101,12 +101,12 @@ where
     {
         let serialized_key = bincode::serialize(&key)?;
         let serialized_val = bincode::serialize(&value)?;
-        Ok(<Self as Store<State>>::set(
+        <Self as Store<State>>::set(
             self,
             serialized_key,
             serialized_val,
             msg,
-        )?)
+        )
     }
 
     ///
@@ -116,7 +116,7 @@ where
         K: Serialize,
     {
         let serialized_key = bincode::serialize(&key)?;
-        Ok(<Self as Store<State>>::del(self, serialized_key, msg)?)
+        <Self as Store<State>>::del(self, serialized_key, msg)
     }
 
     pub fn storage(&self) -> Arc<dyn Store<State>> {
@@ -141,9 +141,9 @@ where
                     return Ok(Arc::new(rdb));
                 }
 
-                return Err(CallystoError::GeneralError(
+                Err(CallystoError::GeneralError(
                     "RocksDB feature is not enabled. `store-rocksdb` is the feature name.".into(),
-                ));
+                ))
             }
             "aerospikedb" | "aerospike" => todo!(),
             storage_backend => Err(CallystoError::GeneralError(format!(

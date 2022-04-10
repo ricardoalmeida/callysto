@@ -67,8 +67,6 @@ where
                     table.changelog_topic_name()
                 );
                 let changelog_topic_name = table.changelog_topic_name();
-                let table = table.to_owned();
-                let consumer = consumer.clone();
                 nuclei::spawn(async move {
                     info!(
                         "Recovery started for changelog topic: `{}`",

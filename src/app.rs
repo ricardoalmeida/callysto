@@ -409,7 +409,8 @@ where
         );
 
         use crate::kafka::enums::SecurityProtocol::*;
-        let cc = match self.config.kafka_config.security_protocol {
+        
+        match self.config.kafka_config.security_protocol {
             Ssl => {
                 // SSL context is passed down with these arguments.
                 self.build_ssl_context(cc)
@@ -424,15 +425,13 @@ where
                 self.build_ssl_context(cc)
             }
             _ => cc,
-        };
-        cc
+        }
     }
 
     fn build_sasl_context(&self, mut cc: ClientConfig) -> ClientConfig {
         self.config
             .kafka_config
             .sasl_mechanism
-            .clone()
             .map(|e| cc.set("sasl.mechanism", format!("{}", e)));
 
         self.config
@@ -478,7 +477,6 @@ where
         self.config
             .kafka_config
             .ssl_endpoint_identification_algorithm
-            .clone()
             .map(|e| cc.set("ssl.endpoint.identification.algorithm", format!("{}", e)));
 
         cc
