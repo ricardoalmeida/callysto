@@ -77,11 +77,8 @@ where
             info!("Started CTask - App `{}`", self.app_name.clone());
 
             let context = Context::new(state);
-            match Task::<State>::call(self, context).await {
-                Err(e) => {
-                    error!("CTask failed: {}", e);
-                }
-                _ => {}
+            if let Err(e) = Task::<State>::call(self, context).await {
+                error!("CTask failed: {}", e);
             }
         };
 

@@ -171,17 +171,20 @@ where
         let source_topic_stats = source_topic_ccontext.get_stats();
         match &*source_topic_stats {
             Some(stat) => {
-                let source_topic_meta = stat.topics.get(source_topic_name.as_str()).ok_or(
-                    CallystoError::GeneralError("Source topic is not found in metadata.".into()),
-                )?;
+                let source_topic_meta =
+                    stat.topics.get(source_topic_name.as_str()).ok_or_else(|| {
+                        CallystoError::GeneralError("Source topic is not found in metadata.".into())
+                    })?;
                 // dbg!(&source_topic_meta);
                 let changelog_topic_meta = stat
                     .topics
                     .get(self.changelog_topic.topic_name().as_str())
-                    .ok_or(CallystoError::NoTopic(
-                        self.changelog_topic.topic_name(),
-                        "Changelog topic is not found in metadata.".into(),
-                    ))?;
+                    .ok_or_else(|| {
+                        CallystoError::NoTopic(
+                            self.changelog_topic.topic_name(),
+                            "Changelog topic is not found in metadata.".into(),
+                        )
+                    })?;
                 let source_n = source_topic_meta.partitions.len() - 1;
                 let changelog_n = changelog_topic_meta.partitions.len() - 1;
 
@@ -223,25 +226,24 @@ where
                     let source_topic_name = source_topic_ccontext.topic_name.clone();
                     let source_topic_stats = source_topic_ccontext.get_stats();
 
-                    match &*source_topic_stats {
-                        Some(s) => {
-                            let source_topic_meta = s
-                                .topics
-                                .get(source_topic_name.as_str())
-                                .ok_or(CallystoError::NoTopic(
+                    if let Some(s) = &*source_topic_stats {
+                        let source_topic_meta = s
+                            .topics
+                            .get(source_topic_name.as_str())
+                            .ok_or_else(|| {
+                                CallystoError::NoTopic(
                                     source_topic_name,
                                     "Source topic is not found in metadata.".into(),
-                                ))
-                                .unwrap();
-                            let source_n = source_topic_meta.partitions.len() - 1;
+                                )
+                            })
+                            .unwrap();
+                        let source_n = source_topic_meta.partitions.len() - 1;
 
-                            self.changelog_topic
-                                .topic_declare(false, false, 0_f64, source_n)
-                                .await?;
+                        self.changelog_topic
+                            .topic_declare(false, false, 0_f64, source_n)
+                            .await?;
 
-                            break;
-                        }
-                        _ => {}
+                        break;
                     }
                 }
             }
@@ -261,17 +263,14 @@ where
         nuclei::spawn(async move {
             let producer = topic.producer();
             loop {
-                match rx.recv() {
-                    Ok((partition, serialized_key, serialized_value)) => {
-                        let topic_name = topic.topic_name();
-                        let serialized_key = serialized_key.clone();
-                        let serialized_value = serialized_value.clone();
+                if let Ok((partition, serialized_key, serialized_value)) = rx.recv() {
+                    let topic_name = topic.topic_name();
+                    let serialized_key = serialized_key.clone();
+                    let serialized_value = serialized_value.clone();
 
-                        producer
-                            .send(topic_name, partition, serialized_key, serialized_value)
-                            .await;
-                    }
-                    _ => {}
+                    producer
+                        .send(topic_name, partition, serialized_key, serialized_value)
+                        .await;
                 }
             }
         });
@@ -423,8 +422,8 @@ where
         todo!()
     }
 
-    fn into_service(&self) -> Arc<&dyn Service<State>> {
-        Arc::new(self)
+    fn into_service(&self) -> &dyn Service<State> {
+        self
     }
 }
 

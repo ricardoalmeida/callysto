@@ -128,13 +128,10 @@ where
                     let stream = consumer.cstream();
                     let state = state.clone();
                     let context = Context::new(state);
-                    match Agent::<State>::call(self, stream, context).await {
-                        Err(e) => {
-                            error!("CAgent failed: {}", e);
-                            self.crash().await;
-                            break 'main;
-                        }
-                        _ => {}
+                    if let Err(e) = Agent::<State>::call(self, stream, context).await {
+                        error!("CAgent failed: {}", e);
+                        self.crash().await;
+                        break 'main;
                     }
                 }
 

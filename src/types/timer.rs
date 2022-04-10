@@ -70,11 +70,8 @@ where
             loop {
                 let state = self.state.clone();
                 let context = Context::new(state);
-                match Task::<State>::call(self, context).await {
-                    Err(e) => {
-                        error!("CTimer failed: {}", e);
-                    }
-                    _ => {}
+                if let Err(e) = Task::<State>::call(self, context).await {
+                    error!("CTimer failed: {}", e);
                 }
             }
         };

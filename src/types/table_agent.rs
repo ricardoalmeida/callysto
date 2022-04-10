@@ -161,13 +161,11 @@ where
                         break 'fallback;
                     }
                     let context = Context::new(state);
-                    match TableAgent::<State>::call(self, message, tables, context).await {
-                        Err(e) => {
-                            error!("CTableAgent failed: {}", e);
-                            self.crash().await;
-                            break 'main;
-                        }
-                        Ok(_) => {}
+                    if let Err(e) = TableAgent::<State>::call(self, message, tables, context).await
+                    {
+                        error!("CTableAgent failed: {}", e);
+                        self.crash().await;
+                        break 'main;
                     }
                 }
 

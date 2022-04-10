@@ -78,10 +78,8 @@ impl Callysto<()> {
     /// ```rust
     /// use callysto::prelude::*;
     ///
-    /// fn main() {
-    ///     let mut app = Callysto::new();
-    ///     app.with_name("example-app");
-    /// }
+    /// let mut app = Callysto::new();
+    /// app.with_name("example-app");
     /// ```
     pub fn new() -> Self {
         Self::with_state(())
@@ -110,17 +108,15 @@ where
     /// ```rust
     /// use callysto::prelude::*;
     ///
-    /// // Shared State
+    /// Shared State
     /// #[derive(Clone)]
     /// struct State {
     ///    name: String,
     /// }
     ///
-    /// fn main() {
-    ///     let state = State { name: "Callysto".into() };
-    ///     let mut app = Callysto::with_state(state);
-    ///     app.with_name("stateful-app");
-    /// }
+    /// let state = State { name: "Callysto".into() };
+    /// let mut app = Callysto::with_state(state);
+    /// app.with_name("stateful-app");
     /// ```
     pub fn with_state(state: State) -> Self {
         Self {
@@ -165,10 +161,8 @@ where
     /// ```rust
     /// use callysto::prelude::*;
     ///
-    /// fn main() {
-    ///     let mut app = Callysto::new();
-    ///     app.with_storage("rocksdb:///home/callysto/datadir");
-    /// }
+    /// let mut app = Callysto::new();
+    /// app.with_storage("rocksdb:///home/callysto/datadir");
     /// ```
     pub fn with_storage<T>(&mut self, url: T) -> &mut Self
     where
@@ -197,10 +191,8 @@ where
     /// ```rust
     /// use callysto::prelude::*;
     ///
-    /// fn main() {
-    ///     let mut app = Callysto::new();
-    ///     app.with_name("amazing-service-of-mine");
-    /// }
+    /// let mut app = Callysto::new();
+    /// app.with_name("amazing-service-of-mine");
     /// ```
     pub fn with_name<T: AsRef<str>>(&mut self, name: T) -> &mut Self {
         self.app_name = name.as_ref().to_string();
@@ -217,10 +209,8 @@ where
     /// ```rust
     /// use callysto::prelude::*;
     ///
-    /// fn main() {
-    ///     let mut app = Callysto::new();
-    ///     app.with_brokers("kafka1:9092,kafka2:9092,kafka3:9092");
-    /// }
+    /// let mut app = Callysto::new();
+    /// app.with_brokers("kafka1:9092,kafka2:9092,kafka3:9092");
     /// ```
     pub fn with_brokers<T: AsRef<str>>(&mut self, brokers: T) -> &mut Self {
         self.brokers = brokers.as_ref().to_string();
