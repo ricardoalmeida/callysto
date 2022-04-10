@@ -29,7 +29,6 @@ pub struct InMemoryStore {
 
 impl InMemoryStore {
     pub fn new(app_name: String, storage_url: Url, table_name: String) -> Self {
-        
         Self {
             app_name,
             storage_url,

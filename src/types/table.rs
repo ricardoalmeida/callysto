@@ -101,12 +101,7 @@ where
     {
         let serialized_key = bincode::serialize(&key)?;
         let serialized_val = bincode::serialize(&value)?;
-        <Self as Store<State>>::set(
-            self,
-            serialized_key,
-            serialized_val,
-            msg,
-        )
+        <Self as Store<State>>::set(self, serialized_key, serialized_val, msg)
     }
 
     ///

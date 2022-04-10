@@ -409,7 +409,7 @@ where
         );
 
         use crate::kafka::enums::SecurityProtocol::*;
-        
+
         match self.config.kafka_config.security_protocol {
             Ssl => {
                 // SSL context is passed down with these arguments.
