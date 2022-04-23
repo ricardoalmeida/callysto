@@ -3,28 +3,11 @@
   "extends": ["config:base"],
   "packageRules": [
     {
-      "packagePatterns": ["^futures[-_]?"],
-      "groupName": "futures packages"
-    },
-    {
-      "packagePatterns": ["^serde[-_]?"],
-      "groupName": "serde packages"
-    },
-    {
-      "packagePatterns": ["^tracing[-_]?"],
-      "excludePackageNames": ["tracing-opentelemetry"],
-      "groupName": "tracing packages"
-    },
-    {
-      "groupName": "dependencies-non-major",
-      "matchDepTypes": ["dependencies"],
-      "matchUpdateTypes": ["patch", "minor"]
-    },
-    {
-      "groupName": "devDependencies-non-major",
-      "matchDepTypes": ["devDependencies"],
-      "matchUpdateTypes": ["patch", "minor"]
+      "matchFiles": ["docker-compose*"],
+      "matchUpdateTypes": ["minor", "major"],
+      "enabled": false
     }
   ],
+  "separateMinorPatch": true,
   "schedule": ["every weekend"]
 }
