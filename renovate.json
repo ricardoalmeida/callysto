@@ -4,8 +4,12 @@
   "packageRules": [
     {
       "matchFiles": ["docker-compose*"],
-      "matchUpdateTypes": ["minor", "major"],
+      "matchUpdateTypes": ["minor"],
       "enabled": false
+    },
+    {
+      "groupName": "Confluent Platform",
+      "matchFiles": ["confluentinc*"]
     }
   ],
   "separateMinorPatch": true,
